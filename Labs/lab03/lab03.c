@@ -1,83 +1,241 @@
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
+#define MAX_INPUT 13 // Max numbers of characters on input
+#define MAX_BIN 36 // 32 bits + 0b + \0 = 35
+#define MAX_HEX 12 // 8 bits + 0b + \0 = 11
 
-#define MAX_INPUT 11 // Max numbers of characters on input
-
-
-void read(char str[]){
-    scanf("%s", str);
+//Input and Output
+int read(int __fd, const void *__buf, int __n){
+  int bytes;
+  __asm__ __volatile__(
+    "mv a0, %1           # file descriptor\n"
+    "mv a1, %2           # buffer \n"
+    "mv a2, %3           # size \n"
+    "li a7, 63           # syscall read (63) \n"
+    "ecall \n"
+    "mv %0, a0"
+    : "=r"(bytes)  // Output list
+    :"r"(__fd), "r"(__buf), "r"(__n)    // Input list
+    : "a0", "a1", "a2", "a7"
+  );
+  return bytes;
+}
+ 
+void write(int __fd, const void *__buf, int __n){
+  __asm__ __volatile__(
+    "mv a0, %0           # file descriptor\n"
+    "mv a1, %1           # buffer \n"
+    "mv a2, %2           # size \n"
+    "li a7, 64           # syscall write (64) \n"
+    "ecall"
+    :   // Output list
+    :"r"(__fd), "r"(__buf), "r"(__n)    // Input list
+    : "a0", "a1", "a2", "a7"
+  );
 }
 
-// int number(char str[]){
-//     int cont = strlen(str) - 1, a = 0, num = 0;
 
-//     if(str[0] == '0') a = 2;
-//     else if (str[0] == '-') a = 1;
+// Backside functions
+void inicializate(char bin[], char hex[], char dec[], char end[]){
 
-//     for(int i = a; i < strlen(str);i++)
-//         num += (str[i]-48)*pow(10,cont-i);
+  bin[MAX_BIN-1] ='\0';
+  hex[MAX_HEX-1] = '\0';
+  dec[MAX_INPUT-1] = '\0';
+  end[MAX_INPUT-1] = '\0';
 
-//     if(a == 1) return (-1)*num;
-//     return num;
-// }
+  bin[MAX_BIN-2] ='\n';
+  hex[MAX_HEX-2] = '\n';
+  dec[MAX_INPUT-2] = '\n';
+  end[MAX_INPUT-2] = '\n';
 
-int Dec_Bin(int dec){
-    if(dec < 2) return dec % 2;
-    return 10*Dec_Bin(dec/2) + (dec%2);
+  for(int i = 0; i < MAX_BIN - 2;i++) {bin[i] = '0';}
+  for(int i = 0; i < MAX_HEX - 2;i++) {hex[i] = '0';}
+  for(int i = 0; i < MAX_INPUT - 2;i++) {dec[i] = '0';}
+  for(int i = 0; i < MAX_INPUT - 2;i++) {end[i] = '0';}
+  
+}
+
+int stringlen(char str[]){
+  int i;
+  for( i = 0; str[i] != '\0'; i++) ;
+  return i;
+}
+
+unsigned long int power(int base, int exp){
+  unsigned long int num =1;
+  for(int i = 0 ; i < exp; i++)
+    num = num*base;
+  return num;
+}
+
+void copy(char str[],char hex[], int n){
+  int len = n;
+  for(int i = 0; str[len -1 -i] != 'x'; i++)
+    hex[MAX_HEX-2-i] = str[len -1 -i];
 }
 
 
-// int Hex_Bin(int num){
-//     int cont = 0;
-//     while(num > 0){
-//         bin = Dec_Bin(num%10)*pow(10,cont);
-//         cont +=4;
-//         num = num / 10;
-//     }
+// Main converting functions
+unsigned long int number(char str[]){
+    int cont = stringlen(str) - 2, a = 0;
+    unsigned long int  num = 0;
 
+    if (str[0] == '-') a = 1;
 
-// }
-int decimal(char str[]);
-void hexadecimal(char bin[],char hex[]);
-int endianness_dec(char hex[]);
+    for(int i = a; i < stringlen(str)-1;i++){
+      
+        num += (str[i]-48)*power(10,cont-i);
+    }
+    return num;
+}
 
+void Dec_Bin(unsigned long int dec, char str[]){
+    int cont = MAX_BIN-2;
+    while(dec > 0){
+      
+      str[cont] = (dec % 2) + 48;
+      cont--;
+      dec = dec / 2;
+    }
+}
+
+void Dec_Hex(unsigned long int dec, char str[]){
+    int cont = MAX_HEX-3, aux;
+    while(dec > 0){
+
+      aux = (dec % 16);
+      if(aux <= 9) aux = aux + 48;
+      else aux = aux - 10 + 97;
+
+      str[cont] = aux ;
+      cont--;
+      dec = dec / 16;
+    }
+}
+
+unsigned long int Hex_Dec(char str[]){
+    int  aux, index = MAX_HEX-3, cont = 0;
+    unsigned long int num=0;
+    while(index > 1){
+
+      aux = str[index];
+      if(aux >= 97) aux = 10 + aux - 97;
+      else aux = aux - 48; 
+
+      num += aux*power(16, cont);
+      
+      index--;
+      cont++;
+      
+    }
+    return num;
+}
+
+void Complement_Bin(char bin[]){
+  int i;
+  for(i = 2; i <= MAX_BIN - 2; i++)
+    bin[i] = 49 - bin[i] + 48;
+
+  for(i = MAX_BIN - 2; bin[i] != '0'; i--)
+    bin[i] = 48;
+  bin[i] = 49;
+}
+
+void Complement_Hex(char hex[]){
+  int i;
+  for(i = 2; i <= MAX_HEX - 3; i++){
+    if(hex[i] >= 97) hex[i] = 102 - hex[i] ;
+    else hex[i] = 6 + (57 - hex[i]) ;   
+  }
+
+  for(i = MAX_HEX - 3; hex[i] == 15; i--)
+    hex[i]= 0;
+  hex[i]++;
+
+ for(i = 2; i < MAX_HEX - 2; i++){
+    if(hex[i] > 9) hex[i] = 96 -9 + hex[i] ;
+    else hex[i] = 48 + hex[i] ;   
+  }
+}
+
+unsigned long int Endianess(char hex[]){
+  int aux, i;
+  
+  char space[1] ={"\n"};
+  char end[MAX_HEX];
+  end[MAX_HEX-1]='\0';
+  end[MAX_HEX-2]='\n';
+  for(int i = 0; i < MAX_HEX - 2;i++) {end[i] = '0';}
+
+  for(i = 2; i < 10;i++){
+    end[i] = hex[MAX_HEX-i-1];
+  }
+
+  i = 2;
+  while(i <= MAX_HEX -2){
+    aux = end[i];
+    end[i] = end[i+1];
+    end[i+1] = aux;
+    i+=2;
+  }
+   return Hex_Dec(end);
+}
+
+// Format
+
+void int_str(char str[], unsigned long int num){
+    int cont = MAX_INPUT-3; 
+    unsigned long int dec = num;
+  
+    while(dec != 0){
+      
+      str[cont] = dec % 10 + 48;
+  
+      cont--;
+      dec = dec / 10;
+    }
+}
 
 int main()
 {
-  //Declaration  
-  char str[MAX_INPUT];
-  int num, bin , end_dec;
-    int dec;
-  //Input
-//   read(str);
-    scanf("%d",&num);
+  char str[MAX_INPUT] , space[1] ={"\n"};
+  unsigned long int num;
+  char bin[MAX_BIN], hex[MAX_HEX], dec[MAX_INPUT], end_dec[MAX_INPUT];
 
-  // Functions Execution 
+  //Inicialization and Input
+  inicializate(bin ,hex, dec, end_dec);
+  int n = read(0, str, MAX_INPUT);
 
-  //num = number(str);
+  // Converting Numbers
 
-//   if(strcmp(str[0],'0') == 0){
-//     bin = Hex_Bin(num);
-//     }
+  if(str[1] == 'x'){
 
-//   if(strcmp(str[0],0) == 0){
-//     dec = decimal(str);
-//     printf("%d\n",dec);
-//   } else printf("%s\n",str);
-    
-//   hexadecimal(bin,hex);
-//   printf("%s\n",hex);
+     copy(str,hex,n);
+     num = Hex_Dec(hex);
+     Dec_Bin(num, bin);
+  } 
+  else {
+    num = number(str);
 
+    Dec_Bin(num, bin); 
+    Dec_Hex(num, hex);
+  
+    if(str[0] == '-'){Complement_Bin(bin); Complement_Hex(hex);}
+  }
+ 
+  //Modifying string
 
-//   end_dec= endianness_dec(hex);
-//   printf("%d\n",end_dec);
+ int_str(dec,num);
+ int_str(end_dec,  Endianess(hex));
 
-    // printf("%d\n", num);
-    printf("%d\n", Dec_Bin(num));
-
+  //Output
+  write(1,bin,MAX_BIN-1);
+  write(1,space,1);
+  write(1,dec,MAX_INPUT-1);
+  if(str[1] == 'x') write(1,str,n); else write(1,hex,MAX_HEX-1);;
+  write(1,end_dec,MAX_INPUT-1);
 
   return 0;
 }
- 
 
+void _start(){
+  main();
+}
