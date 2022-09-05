@@ -1,6 +1,6 @@
 #define MAX_INPUT 13 // Max numbers of characters on input
-#define MAX_BIN 36 // 32 bits + 0b + \0 = 35
-#define MAX_HEX 12 // 8 bits + 0b + \0 = 11
+#define MAX_BIN 36 // 32 bits + 0b + \n + \0 = 36
+#define MAX_HEX 12 // 8 bits + 0b + \n + \0 = 12
 
 //Input and Output
 int read(int __fd, const void *__buf, int __n){
