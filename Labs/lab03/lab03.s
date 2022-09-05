@@ -908,7 +908,7 @@ str_cut:
 	bne	a0, a1, .LBB14_2
 	j	.LBB14_1
 .LBB14_1:
-	addi	a0, zero, 35
+	addi	a0, zero, 34
 	sw	a0, -20(s0)
 	j	.LBB14_9
 .LBB14_2:
@@ -918,7 +918,7 @@ str_cut:
 	bne	a0, a1, .LBB14_4
 	j	.LBB14_3
 .LBB14_3:
-	addi	a0, zero, 10
+	addi	a0, zero, 11
 	sw	a0, -20(s0)
 	j	.LBB14_8
 .LBB14_4:
@@ -928,13 +928,13 @@ str_cut:
 	bne	a0, a1, .LBB14_6
 	j	.LBB14_5
 .LBB14_5:
-	addi	a0, zero, 11
+	addi	a0, zero, 12
 	sw	a0, -20(s0)
 	addi	a0, zero, 1
 	sw	a0, -28(s0)
 	j	.LBB14_7
 .LBB14_6:
-	addi	a0, zero, 11
+	addi	a0, zero, 12
 	sw	a0, -20(s0)
 	mv	a0, zero
 	sw	a0, -28(s0)
@@ -997,7 +997,6 @@ str_cut:
 	lw	a0, -28(s0)
 	lw	a1, -24(s0)
 	add	a0, a0, a1
-	addi	a0, a0, 1
 	lw	s0, 24(sp)
 	lw	ra, 28(sp)
 	addi	sp, sp, 32
@@ -1014,136 +1013,166 @@ main:
 	sw	s0, 136(sp)
 	addi	s0, sp, 144
 	mv	a0, zero
-	sw	a0, -132(s0)
+	sw	a0, -128(s0)
 	sw	a0, -12(s0)
 	addi	a0, zero, 10
 	sb	a0, -26(s0)
-	addi	a0, s0, -68
-	addi	a1, s0, -80
-	addi	a2, s0, -93
-	addi	a3, s0, -106
+	addi	a0, s0, -62
+	addi	a1, s0, -74
+	addi	a2, s0, -87
+	addi	a3, s0, -100
 	call	inicializate
-	lw	a0, -132(s0)
+	lw	a0, -128(s0)
 	addi	a1, s0, -25
 	addi	a2, zero, 13
 	call	read
-	sw	a0, -112(s0)
+	sw	a0, -124(s0)
 	lbu	a0, -24(s0)
 	addi	a1, zero, 120
-	bne	a0, a1, .LBB15_2
+	bne	a0, a1, .LBB15_4
 	j	.LBB15_1
 .LBB15_1:
-	lw	a2, -112(s0)
+	lw	a2, -124(s0)
 	addi	a0, s0, -25
-	addi	a1, s0, -80
-	sw	a1, -136(s0)
+	addi	a1, s0, -74
+	sw	a1, -132(s0)
 	call	copy
-	lw	a0, -136(s0)
+	lw	a0, -132(s0)
 	call	Hex_Dec
-	sw	a0, -32(s0)
-	lw	a0, -32(s0)
-	addi	a1, s0, -68
+	sw	a0, -104(s0)
+	lw	a0, -104(s0)
+	addi	a1, s0, -62
 	call	Dec_Bin
-	j	.LBB15_5
+	lw	a1, -104(s0)
+	addi	a0, a1, 1
+	bgeu	a0, a1, .LBB15_3
+	j	.LBB15_2
 .LBB15_2:
+	addi	a0, zero, 1
+	sw	a0, -104(s0)
+	j	.LBB15_3
+.LBB15_3:
+	j	.LBB15_7
+.LBB15_4:
 	addi	a0, s0, -25
 	call	number
-	sw	a0, -32(s0)
-	lw	a0, -32(s0)
-	addi	a1, s0, -68
+	sw	a0, -104(s0)
+	lw	a0, -104(s0)
+	addi	a1, s0, -62
 	call	Dec_Bin
-	lw	a0, -32(s0)
-	addi	a1, s0, -80
+	lw	a0, -104(s0)
+	addi	a1, s0, -74
 	call	Dec_Hex
 	lbu	a0, -25(s0)
 	addi	a1, zero, 45
-	bne	a0, a1, .LBB15_4
-	j	.LBB15_3
-.LBB15_3:
-	addi	a0, s0, -68
-	call	Complement_Bin
-	addi	a0, s0, -80
-	call	Complement_Hex
-	j	.LBB15_4
-.LBB15_4:
+	bne	a0, a1, .LBB15_6
 	j	.LBB15_5
 .LBB15_5:
-	lw	a1, -32(s0)
-	addi	a0, s0, -93
-	call	int_str
-	addi	a0, s0, -80
-	call	Endianess
-	mv	a1, a0
-	addi	a0, s0, -106
-	call	int_str
-	lbu	a0, -66(s0)
-	addi	a1, zero, 49
-	bne	a0, a1, .LBB15_7
+	addi	a0, s0, -62
+	call	Complement_Bin
+	addi	a0, s0, -74
+	call	Complement_Hex
 	j	.LBB15_6
 .LBB15_6:
-	addi	a0, zero, 45
-	sb	a0, -93(s0)
 	j	.LBB15_7
 .LBB15_7:
-	addi	a0, zero, 98
-	sb	a0, -67(s0)
-	addi	a0, zero, 120
-	sw	a0, -140(s0)
-	sb	a0, -79(s0)
-	addi	a0, s0, -68
-	sw	a0, -144(s0)
-	call	str_cut
-	sw	a0, -116(s0)
-	addi	a0, s0, -93
-	call	str_cut
-	sw	a0, -120(s0)
-	addi	a0, s0, -80
-	call	str_cut
-	sw	a0, -124(s0)
-	addi	a0, s0, -106
-	call	str_cut
-	lw	a1, -144(s0)
-	sw	a0, -128(s0)
-	lw	a2, -116(s0)
-	addi	a0, zero, 1
-	call	write
-	lw	a1, -140(s0)
-	lbu	a0, -24(s0)
-	beq	a0, a1, .LBB15_9
+	lw	a1, -104(s0)
+	addi	a0, s0, -87
+	call	int_str
+	addi	a0, s0, -74
+	call	Endianess
+	mv	a1, a0
+	addi	a0, s0, -100
+	call	int_str
+	lbu	a0, -60(s0)
+	addi	a1, zero, 49
+	bne	a0, a1, .LBB15_9
 	j	.LBB15_8
 .LBB15_8:
-	lw	a2, -112(s0)
-	addi	a0, zero, 1
-	addi	a1, s0, -25
-	call	write
-	j	.LBB15_10
+	addi	a0, zero, 45
+	sb	a0, -87(s0)
+	j	.LBB15_9
 .LBB15_9:
-	lw	a2, -120(s0)
-	addi	a0, zero, 1
-	addi	a1, s0, -93
-	call	write
+	addi	a0, zero, 98
+	sb	a0, -61(s0)
+	addi	a0, zero, 120
+	sw	a0, -136(s0)
+	sb	a0, -73(s0)
+	addi	a0, s0, -62
+	call	str_cut
+	lw	a1, -136(s0)
+	sw	a0, -108(s0)
+	lbu	a0, -24(s0)
+	bne	a0, a1, .LBB15_11
 	j	.LBB15_10
 .LBB15_10:
-	lbu	a0, -24(s0)
-	addi	a1, zero, 120
-	bne	a0, a1, .LBB15_12
+	addi	a0, s0, -87
+	call	str_cut
+	sw	a0, -112(s0)
 	j	.LBB15_11
 .LBB15_11:
-	lw	a2, -112(s0)
+	lbu	a0, -24(s0)
+	addi	a1, zero, 120
+	beq	a0, a1, .LBB15_13
+	j	.LBB15_12
+.LBB15_12:
+	addi	a0, s0, -74
+	call	str_cut
+	sw	a0, -116(s0)
+	j	.LBB15_13
+.LBB15_13:
+	addi	a0, s0, -100
+	call	str_cut
+	sw	a0, -120(s0)
+	lw	a0, -108(s0)
+	addi	a2, a0, 1
+	addi	a0, zero, 1
+	addi	a1, s0, -62
+	call	write
+	lbu	a0, -24(s0)
+	addi	a1, zero, 120
+	beq	a0, a1, .LBB15_15
+	j	.LBB15_14
+.LBB15_14:
+	lw	a2, -124(s0)
 	addi	a0, zero, 1
 	addi	a1, s0, -25
 	call	write
-	j	.LBB15_13
-.LBB15_12:
-	lw	a2, -124(s0)
+	j	.LBB15_16
+.LBB15_15:
+	lw	a2, -112(s0)
 	addi	a0, zero, 1
-	addi	a1, s0, -80
+	addi	a1, s0, -87
 	call	write
-	j	.LBB15_13
-.LBB15_13:
-	lw	a2, -128(s0)
+	j	.LBB15_16
+.LBB15_16:
+	lbu	a0, -24(s0)
+	addi	a1, zero, 120
+	bne	a0, a1, .LBB15_18
+	j	.LBB15_17
+.LBB15_17:
+	lw	a0, -124(s0)
+	addi	a2, a0, -1
 	addi	a0, zero, 1
-	addi	a1, s0, -106
+	addi	a1, s0, -25
+	call	write
+	j	.LBB15_19
+.LBB15_18:
+	lw	a0, -116(s0)
+	addi	a2, a0, -1
+	addi	a0, zero, 1
+	addi	a1, s0, -74
+	call	write
+	j	.LBB15_19
+.LBB15_19:
+	addi	a1, s0, -26
+	addi	a2, zero, 1
+	sw	a2, -140(s0)
+	mv	a0, a2
+	call	write
+	lw	a0, -140(s0)
+	lw	a2, -120(s0)
+	addi	a1, s0, -100
 	call	write
 	mv	a0, zero
 	lw	s0, 136(sp)

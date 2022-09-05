@@ -197,12 +197,10 @@ void int_str(char str[], unsigned long int num){
 int str_cut(char str[]){
   int i, a, j=0, ini =2;
 
-  
-
-  if(str[1] == 'b') a = MAX_BIN-1 ;
-  else if(str[1] == 'x') a = MAX_HEX-2;
-  else if( str[0] == '-') {a = MAX_INPUT-2; ini = 1;}
-  else{a = MAX_INPUT-2; ini = 0;}
+  if(str[1] == 'b') a = MAX_BIN-2 ;
+  else if(str[1] == 'x') a = MAX_HEX-1;
+  else if( str[0] == '-') {a = MAX_INPUT-1; ini = 1;}
+  else{a = MAX_INPUT-1; ini = 0;}
   
   for(i = ini; str[i] == '0'; i++);
   
@@ -212,15 +210,16 @@ int str_cut(char str[]){
     }
   
   str[ini+j] ='\n';
-  return ini+j+1;
+
+  return ini+j;
 }
 
 
 int main()
 {
-  char str[MAX_INPUT] , space[1] ={'\n'};
+  char str[MAX_INPUT] , space[1] ={'\n'}, bin[MAX_BIN], hex[MAX_HEX], dec[MAX_INPUT], end_dec[MAX_INPUT];
   unsigned long int num;
-  char bin[MAX_BIN], hex[MAX_HEX], dec[MAX_INPUT], end_dec[MAX_INPUT];
+  int i_bin, i_dec, i_hex, i_end_dec;
 
   //Inicialization and Input
   inicializate(bin ,hex, dec, end_dec);
@@ -233,6 +232,7 @@ int main()
      copy(str,hex,n);
      num = Hex_Dec(hex);
      Dec_Bin(num, bin);
+     if(num + 1 < num) num = 1;
   } 
   else {
     num = number(str);
@@ -252,20 +252,19 @@ int main()
  bin[1] = 'b';
  hex[1] = 'x';
 
- int i_bin = str_cut(bin);
- int i_dec = str_cut(dec);
- int i_hex = str_cut(hex);
- int i_end_dec = str_cut(end_dec);
+ i_bin = str_cut(bin);
+ if(str[1] == 'x') {i_dec = str_cut(dec);}
+ if(str[1] != 'x'){i_hex = str_cut(hex);}
+ i_end_dec = str_cut(end_dec);
 
   //Output
 
-  write(1,bin,i_bin);
-
+  write(1,bin,i_bin+1);
   if(str[1] != 'x') write(1,str,n); else write(1,dec,i_dec);
-
-  if(str[1] == 'x') write(1,str,n); else write(1,hex,i_hex);
-  
+  if(str[1] == 'x') write(1,str,n-1); else write(1,hex,i_hex-1);
+  write(1,space,1);
   write(1,end_dec,i_end_dec);
+
 
   return 0;
 }
