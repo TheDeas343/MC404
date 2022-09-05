@@ -392,7 +392,7 @@ Dec_Bin:
 	addi	s0, sp, 32
 	sw	a0, -12(s0)
 	sw	a1, -16(s0)
-	addi	a0, zero, 34
+	addi	a0, zero, 33
 	sw	a0, -20(s0)
 	j	.LBB7_1
 .LBB7_1:
@@ -847,7 +847,9 @@ int_str:
 	addi	s0, sp, 32
 	sw	a0, -12(s0)
 	sw	a1, -16(s0)
-	addi	a0, zero, 10
+	lw	a0, -12(s0)
+	call	stringlen
+	addi	a0, a0, -2
 	sw	a0, -20(s0)
 	lw	a0, -16(s0)
 	sw	a0, -24(s0)
@@ -887,16 +889,132 @@ int_str:
 .Lfunc_end13:
 	.size	int_str, .Lfunc_end13-int_str
 
+	.globl	str_cut
+	.p2align	2
+	.type	str_cut,@function
+str_cut:
+	addi	sp, sp, -32
+	sw	ra, 28(sp)
+	sw	s0, 24(sp)
+	addi	s0, sp, 32
+	sw	a0, -12(s0)
+	mv	a0, zero
+	sw	a0, -24(s0)
+	addi	a0, zero, 2
+	sw	a0, -28(s0)
+	lw	a0, -12(s0)
+	lbu	a0, 1(a0)
+	addi	a1, zero, 98
+	bne	a0, a1, .LBB14_2
+	j	.LBB14_1
+.LBB14_1:
+	addi	a0, zero, 35
+	sw	a0, -20(s0)
+	j	.LBB14_9
+.LBB14_2:
+	lw	a0, -12(s0)
+	lbu	a0, 1(a0)
+	addi	a1, zero, 120
+	bne	a0, a1, .LBB14_4
+	j	.LBB14_3
+.LBB14_3:
+	addi	a0, zero, 10
+	sw	a0, -20(s0)
+	j	.LBB14_8
+.LBB14_4:
+	lw	a0, -12(s0)
+	lbu	a0, 0(a0)
+	addi	a1, zero, 45
+	bne	a0, a1, .LBB14_6
+	j	.LBB14_5
+.LBB14_5:
+	addi	a0, zero, 11
+	sw	a0, -20(s0)
+	addi	a0, zero, 1
+	sw	a0, -28(s0)
+	j	.LBB14_7
+.LBB14_6:
+	addi	a0, zero, 11
+	sw	a0, -20(s0)
+	mv	a0, zero
+	sw	a0, -28(s0)
+	j	.LBB14_7
+.LBB14_7:
+	j	.LBB14_8
+.LBB14_8:
+	j	.LBB14_9
+.LBB14_9:
+	lw	a0, -28(s0)
+	sw	a0, -16(s0)
+	j	.LBB14_10
+.LBB14_10:
+	lw	a0, -12(s0)
+	lw	a1, -16(s0)
+	add	a0, a0, a1
+	lbu	a0, 0(a0)
+	addi	a1, zero, 48
+	bne	a0, a1, .LBB14_13
+	j	.LBB14_11
+.LBB14_11:
+	j	.LBB14_12
+.LBB14_12:
+	lw	a0, -16(s0)
+	addi	a0, a0, 1
+	sw	a0, -16(s0)
+	j	.LBB14_10
+.LBB14_13:
+	j	.LBB14_14
+.LBB14_14:
+	lw	a0, -16(s0)
+	lw	a1, -24(s0)
+	add	a0, a0, a1
+	lw	a1, -20(s0)
+	bge	a0, a1, .LBB14_16
+	j	.LBB14_15
+.LBB14_15:
+	lw	a1, -12(s0)
+	lw	a0, -16(s0)
+	lw	a3, -24(s0)
+	add	a0, a0, a3
+	add	a0, a1, a0
+	lb	a0, 0(a0)
+	lw	a2, -28(s0)
+	add	a2, a2, a3
+	add	a1, a1, a2
+	sb	a0, 0(a1)
+	lw	a0, -24(s0)
+	addi	a0, a0, 1
+	sw	a0, -24(s0)
+	j	.LBB14_14
+.LBB14_16:
+	lw	a0, -12(s0)
+	lw	a1, -28(s0)
+	lw	a2, -24(s0)
+	add	a1, a1, a2
+	add	a1, a0, a1
+	addi	a0, zero, 10
+	sb	a0, 0(a1)
+	lw	a0, -28(s0)
+	lw	a1, -24(s0)
+	add	a0, a0, a1
+	addi	a0, a0, 1
+	lw	s0, 24(sp)
+	lw	ra, 28(sp)
+	addi	sp, sp, 32
+	ret
+.Lfunc_end14:
+	.size	str_cut, .Lfunc_end14-str_cut
+
 	.globl	main
 	.p2align	2
 	.type	main,@function
 main:
-	addi	sp, sp, -128
-	sw	ra, 124(sp)
-	sw	s0, 120(sp)
-	addi	s0, sp, 128
+	addi	sp, sp, -144
+	sw	ra, 140(sp)
+	sw	s0, 136(sp)
+	addi	s0, sp, 144
 	mv	a0, zero
-	sw	a0, -116(s0)
+	sw	a0, -132(s0)
 	sw	a0, -12(s0)
 	addi	a0, zero, 10
 	sb	a0, -26(s0)
@@ -905,29 +1023,29 @@ main:
 	addi	a2, s0, -93
 	addi	a3, s0, -106
 	call	inicializate
-	lw	a0, -116(s0)
+	lw	a0, -132(s0)
 	addi	a1, s0, -25
 	addi	a2, zero, 13
 	call	read
 	sw	a0, -112(s0)
 	lbu	a0, -24(s0)
 	addi	a1, zero, 120
-	bne	a0, a1, .LBB14_2
-	j	.LBB14_1
-.LBB14_1:
+	bne	a0, a1, .LBB15_2
+	j	.LBB15_1
+.LBB15_1:
 	lw	a2, -112(s0)
 	addi	a0, s0, -25
 	addi	a1, s0, -80
-	sw	a1, -120(s0)
+	sw	a1, -136(s0)
 	call	copy
-	lw	a0, -120(s0)
+	lw	a0, -136(s0)
 	call	Hex_Dec
 	sw	a0, -32(s0)
 	lw	a0, -32(s0)
 	addi	a1, s0, -68
 	call	Dec_Bin
-	j	.LBB14_5
-.LBB14_2:
+	j	.LBB15_5
+.LBB15_2:
 	addi	a0, s0, -25
 	call	number
 	sw	a0, -32(s0)
@@ -939,63 +1057,101 @@ main:
 	call	Dec_Hex
 	lbu	a0, -25(s0)
 	addi	a1, zero, 45
-	bne	a0, a1, .LBB14_4
-	j	.LBB14_3
-.LBB14_3:
+	bne	a0, a1, .LBB15_4
+	j	.LBB15_3
+.LBB15_3:
 	addi	a0, s0, -68
 	call	Complement_Bin
 	addi	a0, s0, -80
 	call	Complement_Hex
-	j	.LBB14_4
-.LBB14_4:
-	j	.LBB14_5
-.LBB14_5:
+	j	.LBB15_4
+.LBB15_4:
+	j	.LBB15_5
+.LBB15_5:
 	lw	a1, -32(s0)
 	addi	a0, s0, -93
-	sw	a0, -124(s0)
 	call	int_str
 	addi	a0, s0, -80
 	call	Endianess
 	mv	a1, a0
 	addi	a0, s0, -106
 	call	int_str
-	addi	a0, zero, 1
+	lbu	a0, -66(s0)
+	addi	a1, zero, 49
+	bne	a0, a1, .LBB15_7
+	j	.LBB15_6
+.LBB15_6:
+	addi	a0, zero, 45
+	sb	a0, -93(s0)
+	j	.LBB15_7
+.LBB15_7:
+	addi	a0, zero, 98
+	sb	a0, -67(s0)
+	addi	a0, zero, 120
+	sw	a0, -140(s0)
+	sb	a0, -79(s0)
+	addi	a0, s0, -68
+	sw	a0, -144(s0)
+	call	str_cut
+	sw	a0, -116(s0)
+	addi	a0, s0, -93
+	call	str_cut
+	sw	a0, -120(s0)
+	addi	a0, s0, -80
+	call	str_cut
+	sw	a0, -124(s0)
+	addi	a0, s0, -106
+	call	str_cut
+	lw	a1, -144(s0)
 	sw	a0, -128(s0)
-	addi	a1, s0, -68
-	addi	a2, zero, 35
+	lw	a2, -116(s0)
+	addi	a0, zero, 1
 	call	write
-	lw	a0, -128(s0)
-	lw	a1, -124(s0)
-	addi	a2, zero, 12
-	call	write
+	lw	a1, -140(s0)
 	lbu	a0, -24(s0)
-	addi	a1, zero, 120
-	bne	a0, a1, .LBB14_7
-	j	.LBB14_6
-.LBB14_6:
+	beq	a0, a1, .LBB15_9
+	j	.LBB15_8
+.LBB15_8:
 	lw	a2, -112(s0)
 	addi	a0, zero, 1
 	addi	a1, s0, -25
 	call	write
-	j	.LBB14_8
-.LBB14_7:
+	j	.LBB15_10
+.LBB15_9:
+	lw	a2, -120(s0)
+	addi	a0, zero, 1
+	addi	a1, s0, -93
+	call	write
+	j	.LBB15_10
+.LBB15_10:
+	lbu	a0, -24(s0)
+	addi	a1, zero, 120
+	bne	a0, a1, .LBB15_12
+	j	.LBB15_11
+.LBB15_11:
+	lw	a2, -112(s0)
+	addi	a0, zero, 1
+	addi	a1, s0, -25
+	call	write
+	j	.LBB15_13
+.LBB15_12:
+	lw	a2, -124(s0)
 	addi	a0, zero, 1
 	addi	a1, s0, -80
-	addi	a2, zero, 11
 	call	write
-	j	.LBB14_8
-.LBB14_8:
+	j	.LBB15_13
+.LBB15_13:
+	lw	a2, -128(s0)
 	addi	a0, zero, 1
 	addi	a1, s0, -106
-	addi	a2, zero, 12
 	call	write
 	mv	a0, zero
-	lw	s0, 120(sp)
-	lw	ra, 124(sp)
-	addi	sp, sp, 128
+	lw	s0, 136(sp)
+	lw	ra, 140(sp)
+	addi	sp, sp, 144
 	ret
-.Lfunc_end14:
-	.size	main, .Lfunc_end14-main
+.Lfunc_end15:
+	.size	main, .Lfunc_end15-main
 
 	.globl	_start
 	.p2align	2
@@ -1010,8 +1166,8 @@ _start:
 	lw	ra, 12(sp)
 	addi	sp, sp, 16
 	ret
-.Lfunc_end15:
-	.size	_start, .Lfunc_end15-_start
+.Lfunc_end16:
+	.size	_start, .Lfunc_end16-_start
 
 	.type	.L__const.Endianess.space,@object
 	.section	.rodata,"a",@progbits
@@ -1041,4 +1197,5 @@ _start:
 	.addrsig_sym Complement_Hex
 	.addrsig_sym Endianess
 	.addrsig_sym int_str
+	.addrsig_sym str_cut
 	.addrsig_sym main

@@ -104,7 +104,8 @@ unsigned long int Hex_Dec(char str[]){
 void Complement_Bin(char bin[]){
   int i;
   for(i = 2; i < MAX_BIN - 1; i++)
-    bin[i] = 49 - bin[i] + 48;
+    bin[i] = 49 - bin[i] + 48; 
+    
   for(i = MAX_BIN - 2; bin[i] != '0'; i--)
     bin[i] = 48;
   bin[i] = 49;
@@ -165,6 +166,19 @@ void int_str(char str[], unsigned long int num){
     
 }
 
+void str_cut(char str[]){
+  int i, j=0;
+  
+  for(i = 2; str[i] == '0'; i++);
+
+  while(str[i+j] != '\0'){
+    str[2+j] = str[i+j];
+    j++;
+    }
+  str[2+j] ='\0';
+  printf("%d\n",2+j);
+}
+
 int main()
 {
   char str[MAX_INPUT];
@@ -198,10 +212,13 @@ int main()
   }
  
   //Modifying string
-
+printf("%s\n", bin);
  int_str(dec,num);
  int_str(end_dec,  Endianess(hex));
-
+  str_cut(bin);
+ str_cut(hex);
+ bin[1] = 'b';
+ hex[1] = 'x';
   //Output
 
   printf("%s\n", bin);

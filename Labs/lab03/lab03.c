@@ -88,7 +88,7 @@ unsigned long int number(char str[]){
 }
 
 void Dec_Bin(unsigned long int dec, char str[]){
-    int cont = MAX_BIN-2;
+    int cont = MAX_BIN-3;
     while(dec > 0){
       
       str[cont] = (dec % 2) + 48;
@@ -131,12 +131,12 @@ unsigned long int Hex_Dec(char str[]){
 
 void Complement_Bin(char bin[]){
   int i;
-  for(i = 2; i <= MAX_BIN - 2; i++)
-    bin[i] = 49 - bin[i] + 48;
+  for(i = 2; i <= MAX_BIN - 2; i++) bin[i] = 49 - bin[i] + 48;
 
-  for(i = MAX_BIN - 2; bin[i] != '0'; i--)
-    bin[i] = 48;
+  for(i = MAX_BIN - 2; bin[i] != '0'; i--) bin[i] = 48;
+
   bin[i] = 49;
+
 }
 
 void Complement_Hex(char hex[]){
@@ -182,7 +182,7 @@ unsigned long int Endianess(char hex[]){
 // Format
 
 void int_str(char str[], unsigned long int num){
-    int cont = MAX_INPUT-3; 
+    int cont = stringlen(str) - 2; 
     unsigned long int dec = num;
   
     while(dec != 0){
@@ -194,9 +194,31 @@ void int_str(char str[], unsigned long int num){
     }
 }
 
+int str_cut(char str[]){
+  int i, a, j=0, ini =2;
+
+  
+
+  if(str[1] == 'b') a = MAX_BIN-1 ;
+  else if(str[1] == 'x') a = MAX_HEX-2;
+  else if( str[0] == '-') {a = MAX_INPUT-2; ini = 1;}
+  else{a = MAX_INPUT-2; ini = 0;}
+  
+  for(i = ini; str[i] == '0'; i++);
+  
+  while(i+j < a){
+    str[ini+j] = str[i+j];
+    j++;
+    }
+  
+  str[ini+j] ='\n';
+  return ini+j+1;
+}
+
+
 int main()
 {
-  char str[MAX_INPUT] , space[1] ={"\n"};
+  char str[MAX_INPUT] , space[1] ={'\n'};
   unsigned long int num;
   char bin[MAX_BIN], hex[MAX_HEX], dec[MAX_INPUT], end_dec[MAX_INPUT];
 
@@ -217,7 +239,7 @@ int main()
 
     Dec_Bin(num, bin); 
     Dec_Hex(num, hex);
-  
+    
     if(str[0] == '-'){Complement_Bin(bin); Complement_Hex(hex);}
   }
  
@@ -225,13 +247,25 @@ int main()
 
  int_str(dec,num);
  int_str(end_dec,  Endianess(hex));
+ 
+ if(bin[2] == '1') dec[0] = '-'; 
+ bin[1] = 'b';
+ hex[1] = 'x';
+
+ int i_bin = str_cut(bin);
+ int i_dec = str_cut(dec);
+ int i_hex = str_cut(hex);
+ int i_end_dec = str_cut(end_dec);
 
   //Output
-  write(1,bin,MAX_BIN-1);
-  write(1,space,1);
-  write(1,dec,MAX_INPUT-1);
-  if(str[1] == 'x') write(1,str,n); else write(1,hex,MAX_HEX-1);;
-  write(1,end_dec,MAX_INPUT-1);
+
+  write(1,bin,i_bin);
+
+  if(str[1] != 'x') write(1,str,n); else write(1,dec,i_dec);
+
+  if(str[1] == 'x') write(1,str,n); else write(1,hex,i_hex);
+  
+  write(1,end_dec,i_end_dec);
 
   return 0;
 }
