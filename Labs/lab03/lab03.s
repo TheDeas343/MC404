@@ -1013,47 +1013,73 @@ main:
 	sw	s0, 136(sp)
 	addi	s0, sp, 144
 	mv	a0, zero
-	sw	a0, -128(s0)
+	sw	a0, -132(s0)
 	sw	a0, -12(s0)
-	addi	a0, zero, 10
-	sb	a0, -26(s0)
+	addi	a1, zero, 10
+	sb	a1, -26(s0)
+	sw	a0, -124(s0)
 	addi	a0, s0, -62
 	addi	a1, s0, -74
 	addi	a2, s0, -87
 	addi	a3, s0, -100
 	call	inicializate
-	lw	a0, -128(s0)
+	lw	a0, -132(s0)
 	addi	a1, s0, -25
 	addi	a2, zero, 13
 	call	read
-	sw	a0, -124(s0)
+	sw	a0, -128(s0)
 	lbu	a0, -24(s0)
 	addi	a1, zero, 120
-	bne	a0, a1, .LBB15_4
+	bne	a0, a1, .LBB15_8
 	j	.LBB15_1
 .LBB15_1:
-	lw	a2, -124(s0)
+	lw	a2, -128(s0)
 	addi	a0, s0, -25
 	addi	a1, s0, -74
-	sw	a1, -132(s0)
 	call	copy
-	lw	a0, -132(s0)
+	lw	a0, -128(s0)
+	addi	a0, a0, 40
+	sb	a0, -74(s0)
+	lw	a0, -128(s0)
+	addi	a1, zero, 10
+	blt	a0, a1, .LBB15_4
+	j	.LBB15_2
+.LBB15_2:
+	lbu	a0, -23(s0)
+	addi	a1, zero, 56
+	blt	a0, a1, .LBB15_4
+	j	.LBB15_3
+.LBB15_3:
+	addi	a0, s0, -74
+	call	Complement_Hex
+	j	.LBB15_4
+.LBB15_4:
+	addi	a0, s0, -74
 	call	Hex_Dec
 	sw	a0, -104(s0)
 	lw	a0, -104(s0)
 	addi	a1, s0, -62
 	call	Dec_Bin
-	lw	a1, -104(s0)
-	addi	a0, a1, 1
-	bgeu	a0, a1, .LBB15_3
-	j	.LBB15_2
-.LBB15_2:
-	addi	a0, zero, 1
-	sw	a0, -104(s0)
-	j	.LBB15_3
-.LBB15_3:
+	lw	a0, -128(s0)
+	addi	a1, zero, 10
+	blt	a0, a1, .LBB15_7
+	j	.LBB15_5
+.LBB15_5:
+	lbu	a0, -23(s0)
+	addi	a1, zero, 56
+	blt	a0, a1, .LBB15_7
+	j	.LBB15_6
+.LBB15_6:
+	addi	a0, s0, -62
+	call	Complement_Bin
+	lw	a2, -128(s0)
+	addi	a0, s0, -25
+	addi	a1, s0, -74
+	call	copy
 	j	.LBB15_7
-.LBB15_4:
+.LBB15_7:
+	j	.LBB15_15
+.LBB15_8:
 	addi	a0, s0, -25
 	call	number
 	sw	a0, -104(s0)
@@ -1065,17 +1091,33 @@ main:
 	call	Dec_Hex
 	lbu	a0, -25(s0)
 	addi	a1, zero, 45
-	bne	a0, a1, .LBB15_6
-	j	.LBB15_5
-.LBB15_5:
+	bne	a0, a1, .LBB15_14
+	j	.LBB15_9
+.LBB15_9:
 	addi	a0, s0, -62
 	call	Complement_Bin
 	addi	a0, s0, -74
+	call	stringlen
+	addi	a0, a0, -2
+	addi	a1, zero, 10
+	blt	a0, a1, .LBB15_12
+	j	.LBB15_10
+.LBB15_10:
+	lbu	a0, -23(s0)
+	addi	a1, zero, 56
+	blt	a0, a1, .LBB15_12
+	j	.LBB15_11
+.LBB15_11:
+	j	.LBB15_13
+.LBB15_12:
+	addi	a0, s0, -74
 	call	Complement_Hex
-	j	.LBB15_6
-.LBB15_6:
-	j	.LBB15_7
-.LBB15_7:
+	j	.LBB15_13
+.LBB15_13:
+	j	.LBB15_14
+.LBB15_14:
+	j	.LBB15_15
+.LBB15_15:
 	lw	a1, -104(s0)
 	addi	a0, s0, -87
 	call	int_str
@@ -1086,13 +1128,13 @@ main:
 	call	int_str
 	lbu	a0, -60(s0)
 	addi	a1, zero, 49
-	bne	a0, a1, .LBB15_9
-	j	.LBB15_8
-.LBB15_8:
+	bne	a0, a1, .LBB15_17
+	j	.LBB15_16
+.LBB15_16:
 	addi	a0, zero, 45
 	sb	a0, -87(s0)
-	j	.LBB15_9
-.LBB15_9:
+	j	.LBB15_17
+.LBB15_17:
 	addi	a0, zero, 98
 	sb	a0, -61(s0)
 	addi	a0, zero, 120
@@ -1103,24 +1145,24 @@ main:
 	lw	a1, -136(s0)
 	sw	a0, -108(s0)
 	lbu	a0, -24(s0)
-	bne	a0, a1, .LBB15_11
-	j	.LBB15_10
-.LBB15_10:
+	bne	a0, a1, .LBB15_19
+	j	.LBB15_18
+.LBB15_18:
 	addi	a0, s0, -87
 	call	str_cut
 	sw	a0, -112(s0)
-	j	.LBB15_11
-.LBB15_11:
+	j	.LBB15_19
+.LBB15_19:
 	lbu	a0, -24(s0)
 	addi	a1, zero, 120
-	beq	a0, a1, .LBB15_13
-	j	.LBB15_12
-.LBB15_12:
+	beq	a0, a1, .LBB15_21
+	j	.LBB15_20
+.LBB15_20:
 	addi	a0, s0, -74
 	call	str_cut
 	sw	a0, -116(s0)
-	j	.LBB15_13
-.LBB15_13:
+	j	.LBB15_21
+.LBB15_21:
 	addi	a0, s0, -100
 	call	str_cut
 	sw	a0, -120(s0)
@@ -1131,40 +1173,40 @@ main:
 	call	write
 	lbu	a0, -24(s0)
 	addi	a1, zero, 120
-	beq	a0, a1, .LBB15_15
-	j	.LBB15_14
-.LBB15_14:
-	lw	a2, -124(s0)
+	beq	a0, a1, .LBB15_23
+	j	.LBB15_22
+.LBB15_22:
+	lw	a2, -128(s0)
 	addi	a0, zero, 1
 	addi	a1, s0, -25
 	call	write
-	j	.LBB15_16
-.LBB15_15:
+	j	.LBB15_24
+.LBB15_23:
 	lw	a2, -112(s0)
 	addi	a0, zero, 1
 	addi	a1, s0, -87
 	call	write
-	j	.LBB15_16
-.LBB15_16:
+	j	.LBB15_24
+.LBB15_24:
 	lbu	a0, -24(s0)
 	addi	a1, zero, 120
-	bne	a0, a1, .LBB15_18
-	j	.LBB15_17
-.LBB15_17:
-	lw	a0, -124(s0)
+	bne	a0, a1, .LBB15_26
+	j	.LBB15_25
+.LBB15_25:
+	lw	a0, -128(s0)
 	addi	a2, a0, -1
 	addi	a0, zero, 1
 	addi	a1, s0, -25
 	call	write
-	j	.LBB15_19
-.LBB15_18:
+	j	.LBB15_27
+.LBB15_26:
 	lw	a0, -116(s0)
 	addi	a2, a0, -1
 	addi	a0, zero, 1
 	addi	a1, s0, -74
 	call	write
-	j	.LBB15_19
-.LBB15_19:
+	j	.LBB15_27
+.LBB15_27:
 	addi	a1, s0, -26
 	addi	a2, zero, 1
 	sw	a2, -140(s0)

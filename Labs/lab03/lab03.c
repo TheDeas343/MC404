@@ -219,7 +219,7 @@ int main()
 {
   char str[MAX_INPUT] , space[1] ={'\n'}, bin[MAX_BIN], hex[MAX_HEX], dec[MAX_INPUT], end_dec[MAX_INPUT];
   unsigned long int num;
-  int i_bin, i_dec, i_hex, i_end_dec;
+  int i_bin, i_dec, i_hex, i_end_dec, negativo = 0;
 
   //Inicialization and Input
   inicializate(bin ,hex, dec, end_dec);
@@ -230,9 +230,13 @@ int main()
   if(str[1] == 'x'){
 
      copy(str,hex,n);
+     hex[0] = n+40;
+     if(n>=10 && str[2] >= '8') Complement_Hex(hex); 
+    
      num = Hex_Dec(hex);
      Dec_Bin(num, bin);
-     if(num + 1 < num) num = 1;
+
+     if(n >= 10 && str[2] >= '8'){Complement_Bin(bin); copy(str,hex,n);}
   } 
   else {
     num = number(str);
@@ -240,7 +244,10 @@ int main()
     Dec_Bin(num, bin); 
     Dec_Hex(num, hex);
     
-    if(str[0] == '-'){Complement_Bin(bin); Complement_Hex(hex);}
+    if(str[0] == '-' ){
+      Complement_Bin(bin);
+      if(stringlen(hex)-2 >= 10 && str[2] >= '8');
+      else Complement_Hex(hex);}
   }
  
   //Modifying string
