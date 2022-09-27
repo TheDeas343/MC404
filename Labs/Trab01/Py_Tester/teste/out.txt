@@ -1,0 +1,40 @@
+
+testeAdicional.x:	file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+000110b4 <_start>:
+110b4: 37 15 02 00  lui  a0, 33
+110b8: 13 05 95 f4  addi  a0, a0, -183
+110bc: 93 05 00 00  addi  a1, zero, 0
+110c0: 13 06 00 00  addi  a2, zero, 0
+110c4: 93 06 f0 ff  addi  a3, zero, -1
+
+000110c8 <loop>:
+110c8: 93 72 15 00  andi  t0, a0, 1
+110cc: b3 85 55 00  add  a1, a1, t0
+110d0: 33 46 56 00  xor  a2, a2, t0
+110d4: 93 86 16 00  addi  a3, a3, 1
+110d8: 13 55 15 00  srli  a0, a0, 1
+110dc: 0f 00 30 02  fence  r, rw
+110e0: 0f 00 50 0f  fence  iorw, ow
+110e4: 0f 00 d0 07  fence  orw, iow
+110e8: 0f 10 00 00  fence.i  
+110ec: 0f 10 00 00  fence.i  
+110f0: 73 00 10 00  ebreak  
+110f4: e3 1a 05 fc  bne  a0, zero, 0x110c8 <loop>
+110f8: b3 c6 c5 02   <unknown>
+110fc: 2f a6 07 10   <unknown>
+11100: 0f 00 30 0c  fence  io, rw
+
+00011104 <end>:
+11104: 17 05 00 00  auipc  a0, 0
+11108: 13 05 85 01  addi  a0, a0, 24
+1110c: 23 20 b5 00  sw  a1, 0(a0)
+11110: 13 05 00 00  addi  a0, zero, 0
+11114: 93 08 d0 05  addi  a7, zero, 93
+11118: 73 00 00 00  ecall  
+
+0001111c <result>:
+1111c: 73 00 00 00  ecall  
