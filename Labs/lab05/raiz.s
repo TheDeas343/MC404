@@ -53,15 +53,15 @@ Str_Int:
 
 Sqrt:
     li a7,2
-    li a6,0
-    li a5,10
-    div a2,a3,a7
+    li t0,0
+    div a2,a0,a7
     1:
-        div a4,a3,a2
+        div a4,a0,a2
         add a2,a2,a4
         div a2,a2,a7
-        addi a6,a6,1
-        blt a6,a5,1b
+        addi t0,t0,1
+        blt t0,a1,1b
+    mv a0,a2
     ret
 
 Int_Str:
