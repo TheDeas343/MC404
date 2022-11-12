@@ -291,11 +291,169 @@ exit:
     li a7, 93 # exit syscall
     ecall
     ret
-#void imageFilter(char * img, int width, int height, char filter[3][3]);
+
 .globl imageFilter
 imageFilter:
-    ret
+        ret
 
 
+# char  aplicarFiltro( char imagem, int x, int y, char filter[3][3], int maxLinha, int maxColuna);
+# aplicarFiltro:
+#     # Registradores:
+#             # a0: linha da matriz
+#             # a1: coluna da matriz
+            
+#             # s1: apontador pro comeco da matriz
+#             # s3: valor max coluna
+#             # s4: Armazena a soma
+#             # s10: armazenando o ra final
+
+#             # t0: contador de coluna
+#             # t1: contador de linha
 
 
+#             # a0: lendereço da matriz
+#             # a1: largura
+#             # a2: altura
+#             # a3: matriz filtro 3x3
+
+
+#             # a0: pixel
+#             # a1: linha da matriz
+#             # a2: coluna da matriz
+#             # a3: filtro 3x3
+#             # a4: max linha
+#             # a5: max coluna
+
+            
+
+#         # Pintar as Bordas
+#         li t0 , 0
+#         beq a1, t0, black
+
+#         li t0, 0
+#         addi t0, a4, -1
+#         beq a1, t0, black
+
+#         li t0 , 0
+#         beq a2, t0, black
+
+#         li t0, 0
+#         addi t0, a5, -1
+#         beq a2, t0, black
+
+#         # Tratar a Matriz menor , Aplicar a fomrula do filtro 
+
+#         li s4, 0
+#         li t1, 0
+#         Sum1: 
+#             li t0, 0
+
+#             Sum2:
+#                 # s9: armazena o valor da matriz W
+#                 # s8: armazena o valor da matriz M
+
+#                 li t2 , 1
+#                 bne t1, t2, 1f
+#                 bne t0, t2, 1f
+#                 li s9, 8
+#                 j 2f
+#                 1:
+#                   li s9, -1
+#                 2:
+
+#                 # MATRIZ M
+#                 mv a5, s1
+                
+#                 li t4, 0 # t4 armazena a linha que sera utilizada de M
+#                 add t4, a1, t0
+#                 addi t4, t4, -1
+
+#                 li t5, 0 # t5 armazena a coluna que sera utilizada de M
+#                 add t5, a0, t1
+#                 addi t5, t5, -1
+
+
+#                 # pegando a linha de M
+#                 mul t3, t4, s3
+#                 # pegando a coluna de M
+#                 add t3, t3, t5
+
+#                 add a5, a5, t3
+#                 lbu s8, 0(a5)
+                
+
+#                 mul a2, s8, s9
+#                 add s4, s4, a2
+#                 addi t0, t0, 1
+
+#                 li t2 , 3
+#                 blt t0 , t2, Sum2
+
+#         addi t1, t1, 1
+#         li t2 , 3
+#         blt t1 , t2, Sum1
+
+#         mv a2,s4
+
+#         li t0 , 0
+#         li t1 , 255
+
+#         blt a2, t0, m0
+#         blt t1, a2, m255
+#         j 2f
+
+#         m0:
+#             li a2, 0
+#             j 2f
+#         m255:
+#             li a2, 255
+#             j 2f
+
+#         2:
+#         jal ra, createColor
+#         j 1f
+
+#         black:
+#             sb zero, 0(a0)
+
+#         1:
+#             ret
+
+# #void imageFilter(char * img, int width, int height, char filter[3][3]);
+# .globl imageFilter
+# imageFilter:
+#         addi sp, sp, -16
+#         sw ra, 12(sp)
+#         sw s0, 0(sp)
+#         sw s1, 4(sp)
+#         sw s3, 8(sp)
+
+#         mv s3, a0
+#         mv s0, a1
+#         mv s1, a2
+        
+#         li a2, 0
+#         for_linha: 
+#         li a1, 0
+
+#             for_coluna:
+
+#                 jal ra, aplicarFiltro
+#                 addi a0, a0, 1
+#                 addi a1, a1, 1
+            
+#                 blt a1 , s0, for_coluna
+
+#         addi a2, a2, 1
+#         blt a2 , s1, for_linha
+
+
+#         1:
+#         lw s3, 8(sp)
+#         lw s1, 4(sp)
+#         lw s0, 0(sp)
+#         lw ra, 12(sp)
+#         addi sp, sp, 16
+#         mv a0, s3
+#         ret
