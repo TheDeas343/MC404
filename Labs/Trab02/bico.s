@@ -376,7 +376,7 @@ filter_1d_image:
     1:  
         #tratar as bordas i = 0 e i = 255
         bgt t0, t1, 1f
-        bgt t0, t1, 2f
+        beq t0, t1, 2f
         beq t0, zero, 2f
         j 3f
         2:
