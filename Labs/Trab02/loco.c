@@ -14,7 +14,7 @@ void my_read_sensors(unsigned char *sensor_values)
     char kernel[] = {-2, 5, -2};
     read_camera(light_sensor_buffer);
     filter_1d_image(light_sensor_buffer, kernel);
-    // display_image(light_sensor_buffer); // Apenas para debug, pode gerar um atraso considerável
+     display_image(light_sensor_buffer); // Apenas para debug, pode gerar um atraso considerável
 }
 
 /* A partir do meio da faixa de sensores, ele procura o primeiro sensor que 

@@ -2,6 +2,7 @@
 .set BASE_CAR, 0xFFFF0300
 .set BASE_SP, 0xFFFF0500
 .set BASE_CANV, 0xFFFF0700
+
 .data
 palavra: .ascii "Cheguei 5\n"
 .bss
@@ -125,7 +126,7 @@ int_handler:
         
     read_sensor_distance:
         # Iniciar leitura da Sensor Ultarssonico
-        li t0, 2
+        li t0, 1
         li t1, BASE_CAR
         sb t0, 0x2(t1)
         # Busy-Waiting para o termino da leitura do GPS
@@ -253,14 +254,11 @@ int_handler:
         li t1, 0
         li t2, 256
 
-        mv t5, a0
-
         1:
-            lb a1, 0x0(a0)
+            lbu a1, 0x0(a0)
 
             # Criar a cor 255 / a1 / a1 / a1
-            li a2 , 0
-            addi a2, a2 , 255
+            li a2 , 255
             
             slli a2, a2, 8
             add a2, a2, a1
@@ -287,20 +285,17 @@ int_handler:
 
             # Iniciar leitura do CANVAS
             li t3, 1
-            li t1, BASE_CANV
             sb t3, 0(t0)
             # Busy-Waiting para o termino da leitura 
-            1:
+            2:
                 lb t3, 0(t0)
-                bne t3, zero, 1b
+                bne t3, zero, 2b
 
             # loop
             addi a0, a0, 1
             addi t1, t1, 1
             bne t1, t2, 1b
         
-        mv a0, t5
-
         j end_syscall
 
     get_systime: 
